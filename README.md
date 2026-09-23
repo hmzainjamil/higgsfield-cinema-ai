@@ -3,8 +3,7 @@
 > **Higgsfield Cinema AI** — 29 shot categories, soul consistency, Nano Banana Pro integration, Kling 2.6 cinematic video generation.
 
 <p align="center"><a href="https://github.com/hmzainjamil/higgsfield-cinema-ai">Repository</a> · <a href="https://github.com/hmzainjamil/higgsfield-cinema-ai/commits/main">Commits</a> · <a href="https://github.com/hmzainjamil/higgsfield-cinema-ai/issues">Issues</a></p>
-
-<p align="center"><img alt="Visibility" src="https://img.shields.io/badge/visibility-public-blue"> <img alt="Lifecycle" src="https://img.shields.io/badge/lifecycle-active-success"> <img alt="Documentation" src="https://img.shields.io/badge/documentation-deep%20editorial-lightgrey"></p>
+<p align="center"><img alt="Documentation" src="https://img.shields.io/badge/documentation-deep%20editorial-lightgrey"> <img alt="Lifecycle" src="https://img.shields.io/badge/lifecycle-active-success"></p>
 
 <!-- HMZ DEEP README v1 -->
 
@@ -12,17 +11,16 @@
 
 | Field | Current state |
 |---|---|
-| Visibility | public |
+| Repository | higgsfield-cinema-ai |
+| Visibility | Public |
 | Lifecycle | Active |
-| Repository size | 29 KB |
-| Default branch | main |
 | Evidence basis | Current repository documentation and source-visible material |
 
 ## Why this exists
 
 **Higgsfield Cinema AI** — 29 shot categories, soul consistency, Nano Banana Pro integration, Kling 2.6 cinematic video generation.
 
-This README separates documented capabilities from measured evidence and avoids converting roadmap ideas or external assumptions into implementation claims.
+This README is structured around the repository's documented scope. It does not turn planned work, external assumptions, or unverified marketing claims into implementation facts.
 
 ## 🧠 CONCEPTS
 
@@ -135,9 +133,9 @@ No dedicated test or evaluation section was available in the current README. Per
 
 ## Limitations
 
-- Planned functionality is not presented as completed functionality.
-- Quantitative claims should be backed by reproducible repository evidence.
-- External provider behavior, limits, and pricing are not inferred from repository documentation.
+- Quantitative claims require reproducible evidence.
+- Production readiness is not inferred from README copy.
+- External provider behavior and pricing can change independently of this repository.
 
 ## 📚 RELATED REPOS IN THE HMZ AI SYSTEM
 
