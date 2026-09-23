@@ -1,5 +1,9 @@
 # higgsfield-cinema-ai
 
+<!-- HMZ PORTFOLIO STANDARD -->
+> Portfolio status: active · Visibility: public · Source of truth: current repository source.
+<!-- END HMZ PORTFOLIO STANDARD -->
+
 > **Higgsfield Cinema AI** — 29 shot categories, soul consistency, Nano Banana Pro integration, Kling 2.6 cinematic video generation.
 
 <p align="center">
