@@ -1,154 +1,50 @@
-# higgsfield-cinema-ai
+# Higgsfield Cinema Prompt Pack
 
-> **Higgsfield Cinema AI** — 29 shot categories, soul consistency, Nano Banana Pro integration, Kling 2.6 cinematic video generation.
+A collection of cinematic shot prompts, a small Python prompt-output helper, and a JSON workflow concept. The repository does not contain a Higgsfield client, image or video generation API integration, provider router, install package, or application service.
 
-<p align="center"><a href="https://github.com/hmzainjamil/higgsfield-cinema-ai">Repository</a> · <a href="https://github.com/hmzainjamil/higgsfield-cinema-ai/commits/main">Commits</a> · <a href="https://github.com/hmzainjamil/higgsfield-cinema-ai/issues">Issues</a></p>
-<p align="center"><img alt="Documentation" src="https://img.shields.io/badge/documentation-deep%20editorial-lightgrey"> <img alt="Lifecycle" src="https://img.shields.io/badge/lifecycle-active-success"></p>
+## What is included
 
-<!-- HMZ DEEP README v1 -->
-
-## At a glance
-
-| Field | Current state |
-|---|---|
-| Repository | higgsfield-cinema-ai |
-| Visibility | Public |
-| Lifecycle | Active |
-| Evidence basis | Current repository documentation and source-visible material |
-
-## Why this exists
-
-**Higgsfield Cinema AI** — 29 shot categories, soul consistency, Nano Banana Pro integration, Kling 2.6 cinematic video generation.
-
-This README is structured around the repository's documented scope. It does not turn planned work, external assumptions, or unverified marketing claims into implementation facts.
-
-## 🧠 CONCEPTS
-
-| Feature | Location | Description |
+| Path | Purpose | Status |
 |---|---|---|
-| CoreEngine | `core/engine.py` | Primary execution logic and orchestration layer |
-| ConfigManager | `config/manager.py` | Environment validation, hot-reload, API key checks |
-| ProviderAdapters | `adapters/` | Per-provider API wrappers with auth + retry logic |
-| TierRouter | `routing/tier0.py` | Ollama→DeepSeek→Gemini→Groq→GPT cost ladder |
-| OutputFormatter | `output/formatter.py` | Caveman-compressed, signal-dense output pipeline |
-| LogManager | `logs/manager.py` | Structured JSON logging to ~/.claude/tcc-logs/ |
-| HookHandler | `hooks/handler.py` | SessionStart/Stop integration for Claude Code |
-| RetryLogic | `core/retry.py` | Exponential backoff + alt-provider on persistent failure |
-| StatusTracker | `core/status.py` | Per-operation metrics: latency, cost, confidence scores |
-| Scheduler | `schedule/scheduler.py` | LaunchAgent-based cron scheduling for automation |
+| `SKILL.md` | Shot prompt library and image/video prompt formulas | Prompt documentation; its heading says 29 prompts, while the file contains entries numbered 1–31 |
+| `higgsfield-cinema-agent.md` | Agent role and production guidance | Reference text; product, model, pricing, and capability statements are not verified by this repository |
+| `higgsfield-cinematic-workflow.json` | Proposed creative workflow, model labels, output plan, and example commands | Design data only; no workflow runner or connected provider is included |
+| `higgsfield-shot-generator` | Python script for adapting stored shot prompts and saving Markdown output | Local helper; has filesystem and optional subprocess effects described below |
 
-## ⚙️ HOW IT WORKS
+## Prompt helper
 
-```
-Input / Trigger (CLI command or hook event)
-    │
-    ▼
-ConfigManager: load .env, validate all provider API keys
-    │
-    ▼
-TierRouter: Ollama → DeepSeek → Gemini → Groq → GPT
-    │        (cost-ordered; local-first enforced always)
-    ▼
-CoreEngine: primary processing with selected provider adapter
-    │
-    ├── ProviderAdapter: API call with rate-limit handling
-    ├── RetryLogic: exponential backoff + alt provider on failure
-    ├── StatusTracker: record latency, cost, confidence score
-    │
-    ▼
-OutputFormatter: caveman-compress result to signal-dense format
-    │
-    ▼
-LogManager: persist full run record to ~/.claude/tcc-logs/
-    │
-    ▼
-stdout / file output / hook callback response
-```
-
-## 🚀 INSTALL
+The script uses only Python standard-library imports in the checked-in source. From the repository root, its source documents these forms:
 
 ```bash
-git clone https://github.com/hmzainjamil/higgsfield-cinema-ai
-cd higgsfield-cinema-ai
-pip install -r requirements.txt
-cp .env.example .env
-# Fill in: GROQ_API_KEY, GEMINI_API_KEY, DEEPSEEK_API_KEY
-# Optional: OPENAI_API_KEY, ANTHROPIC_API_KEY (fallback only)
-python setup.py verify    # confirms all provider connections live
-python setup.py hooks     # installs Claude Code SessionStart/Stop hooks
-mkdir -p ~/.claude/tcc-logs/  # create log directory
+python3 higgsfield-shot-generator --list-shots
+python3 higgsfield-shot-generator --shot dolly-in "your subject"
+python3 higgsfield-shot-generator "your subject" --style commercial --shots 6
+python3 higgsfield-shot-generator "your subject" --all-shots
+python3 higgsfield-shot-generator "your narrative" --storyboard --beats 6
 ```
 
-## 📟 USAGE
+These commands are documented from source and have not been run here. The helper is not an image or video renderer. Normal shot selection adapts stored prompt text and writes a Markdown file; storyboard mode calls an external local helper.
 
-```bash
-# Primary usage — single command fires full pipeline
-python main.py "your goal or task description here"
+## Local data and side effects
 
-# Specify provider explicitly (skip auto-routing)
-python main.py --provider groq "summarize this document quickly"
+At startup, the script reads `~/.claude/tier0.env` if present, imports its exported assignments into the process environment, and creates `~/.claude/tcc-logs` and `~/Downloads/higgsfield-output`. It writes generated Markdown under the latter directory.
 
-# Output to file (default: stdout)
-python main.py "task description" --output ~/Downloads/result.md
+Storyboard mode invokes `~/.claude/bin/llm-burst` with the storyboard prompt and a default model label of `groq,gemini`. This repository does not include that executable or establish which services it contacts. Review the executable, its configuration, and data destination before using it with private material. No credentials belong in this repository.
 
-# Dry run — show routing plan without making any API calls
-python main.py --dry-run "test task to check routing"
+## Scope and limitations
 
-# Verbose mode — shows provider selection, scores, latency
-python main.py --verbose "research task with full debug output"
+- The JSON file describes a proposed sequence; it does not execute the listed stages or prove compatibility with named products or models.
+- Model names, current capabilities, availability, prices, and revenue estimates in the prompt and agent materials are unverified here.
+- No dependency manifest, test suite, license file, or release process is present in the repository tree reviewed for this guide.
+- The GitHub repository metadata reports no declared license. Do not infer permission to reuse or redistribute the materials.
 
-# Batch mode — process multiple inputs from file
-python main.py --batch inputs.txt --output ~/Downloads/results/
+## Documentation map
 
-# Status and health verification
-python main.py status      # show all configured providers + health
-python main.py verify      # test live connections to all providers
-```
-
-## ⚙️ CONFIGURATION
-
-| Variable | Default | Description |
-|---|---|---|
-| `GROQ_API_KEY` | — | Groq Cloud API key (primary fast text provider) |
-| `GEMINI_API_KEY` | — | Google AI Studio key (long-context and multimodal) |
-| `DEEPSEEK_API_KEY` | — | DeepSeek API key (code specialist tasks) |
-| `OPENAI_API_KEY` | — | OpenAI (Tier 1 fallback; used after Tier 0 exhausted) |
-| `ANTHROPIC_API_KEY` | — | Claude (final resort; only on explicit user request) |
-| `OLLAMA_BASE_URL` | `http://localhost:11434` | Local Ollama endpoint (checked first always) |
-| `LOG_DIR` | `~/.claude/tcc-logs/` | Output log directory for all run records |
-| `TIMEOUT_S` | `30` | Per-operation timeout in seconds per provider |
-| `RETRY_COUNT` | `2` | Number of retry attempts before marking failed |
-| `CONFIDENCE_THRESHOLD` | `0.6` | Minimum confidence score to accept output (0.0-1.0) |
-| `COMPRESS_OUTPUT` | `true` | Apply caveman-compression to all outputs |
-| `LOG_LEVEL` | `INFO` | Logging verbosity: DEBUG / INFO / WARN / ERROR |
-| `LOCAL_FIRST` | `true` | Always try Ollama before any paid API call |
-| `AUTO_RETRY_ALT` | `true` | Automatically switch provider on persistent failure |
-| `OUTPUT_DIR` | `~/Downloads` | Default directory for all generated file outputs |
-
-## Validation and evidence
-
-No dedicated test or evaluation section was available in the current README. Performance and production-readiness claims are not asserted here.
-
-## 🔐 SECURITY CONSIDERATIONS
-
-## Limitations
-
-- Quantitative claims require reproducible evidence.
-- Production readiness is not inferred from README copy.
-- External provider behavior and pricing can change independently of this repository.
-
-## 📚 RELATED REPOS IN THE HMZ AI SYSTEM
-
-| Repo | Role | Dependency |
-|---|---|---|
-| [G0DM0D3](https://github.com/hmzainjamil/G0DM0D3) | Multi-model racing + Liquid Response | Uses tier0-llm-router |
-| [mae-master-automation-engine](https://github.com/hmzainjamil/mae-master-automation-engine) | Goal decomposition + specialist swarm | Uses tcc, tier0 |
-| [tcc-task-command-center](https://github.com/hmzainjamil/tcc-task-command-center) | Parallel blast + queue + dashboard | Used by mae |
-| [tier0-llm-router](https://github.com/hmzainjamil/tier0-llm-router) | Cost-optimized routing ladder | Used by all |
-| [hermes-ai-system](https://github.com/hmzainjamil/hermes-ai-system) | Persistent agent + 80+ skills | Uses tier0, mcp |
-| [claude-ai-system-backup](https://github.com/hmzainjamil/claude-ai-system-backup) | System backup + restore | Backs up all |
-
-<div align="center">Built by <a href="https://github.com/hmzainjamil">HMZ</a> · Part of the <a href="https://github.com/hmzainjamil/claude-ai-system">HMZ Claude AI System</a> · Zero broken workflows</div>
+- Start here for repository scope, source-backed commands, and local side effects.
+- See [`SKILL.md`](SKILL.md) for the prompt library.
+- See [`higgsfield-cinema-agent.md`](higgsfield-cinema-agent.md) for agent reference material.
+- See [`higgsfield-cinematic-workflow.json`](higgsfield-cinematic-workflow.json) for the workflow concept.
+- See [`higgsfield-shot-generator`](higgsfield-shot-generator) for the helper implementation.
 
 ## Maintainer
 
